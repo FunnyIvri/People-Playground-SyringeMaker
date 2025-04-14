@@ -20,7 +20,7 @@ namespace Mod
                 thumbnail: "test.png",
                 serumID: "TRUE KNOCKOUT SERUM",
                 serumColor: new UnityEngine.Color(1f, 1f, 1f),
-                effects: knockout
+                instantEffect: knockout
             );
         }
     }
