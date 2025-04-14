@@ -52,9 +52,9 @@ namespace Mod
 | Parameter       | Type             | Description |
 |----------------|------------------|-------------|
 | `name`          | `string`         | Display name of the syringe. |
-| `description`   | `string`         | Tooltip or UI description. |
+| `description`   | `string`         | A brief description of the syringe, shown in the UI. |
 | `thumbnail`     | `string`         | Path to the syringe’s icon (e.g., `"Assets/Icons/mySyringe.png"`). |
-| `serumID`       | `string`         | Unique ID to identify the syringe. |
+| `serumID`       | `string`         | Unique ID to identify the serum. |
 | `serumColor`    | `Color`          | Color of the serum inside the syringe. |
 | `effect` | `Action<LimbBehaviour>` | Function to run once when the syringe pierces a limb. |
 | `baseSyringe`   | `string` _(optional)_ | Name of a base syringe to inherit visuals/behavior from (defaults to `"Knockout Syringe"`). |
