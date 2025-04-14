@@ -13,9 +13,21 @@ namespace SyringeMaker
         /// <param name="thumbnail">The file path for the syringe's thumbnail image.</param>
         /// <param name="serumID">A unique string identifier for the serum.</param>
         /// <param name="serumColor">The color used to represent the serum inside the syringe.</param>
-        /// <param name="instantEffect">
-        /// An action that is triggered immediately when the syringe pierces a limb.
+        /// <param name="onEnterLimb">
+        /// Called when this liquid enters a limb. Note that this may be called quite often for the same container as liquid quickly moves in and out of it.
         /// The action receives the affected <see cref="LimbBehaviour"/> as its parameter.
+        /// </param>
+        /// <param name="onUpdate">
+        /// Called every second by every container for every liquid it contains.
+        /// The action receives the affected <see cref="BloodContainer container"/> as its parameter.
+        /// </param>
+        ///<param name="onEnterContainer">
+        /// Called when this liquid enters a container. Limbs are also containers. Note that this may be called quite often for the same container as liquid quickly moves in and out of it.
+        /// The action receives the affected <see cref="BloodContainer container"/> as its parameter.
+        /// </param>
+        ///<param name="onExitContainer">
+        ///Called when this liquid exits a container. Note that this may be called quite often for the same container as liquid quickly moves in and out of it.
+        /// The action receives the affected <see cref="BloodContainer container"/> as its parameter.
         /// </param>
         /// <param name="baseSyringe">The name of an existing syringe to use as a base template. Defaults to "Knockout Syringe".</param>
         /// <param name="category">The category this syringe appears under in the UI. Defaults to "Chemistry".</param>
@@ -25,12 +37,25 @@ namespace SyringeMaker
             string thumbnail,
             string serumID,
             UnityEngine.Color serumColor,
-            Action<LimbBehaviour> effect,
+            Action<LimbBehaviour> onEnterLimb = null,
+            Action<BloodContainer> onUpdate = null,
+            Action<BloodContainer> onEnterContainer = null,
+            Action<BloodContainer> onExitContainer = null,
             string baseSyringe = "Knockout Syringe",
             string category = "Chemistry"
         )
         {
-            ModAPI.RegisterLiquid(serumID, new SyringeItem.Serum(serumID, serumColor, effect));
+            ModAPI.RegisterLiquid(
+                serumID,
+                new SyringeItem.Serum(
+                    serumID,
+                    serumColor,
+                    onEnterLimb,
+                    onUpdate,
+                    OnEnterContainer,
+                    OnExitContainer
+                )
+            );
             ModAPI.Register(
                 new Modification()
                 {
@@ -59,32 +84,46 @@ namespace SyringeMaker
             public class Serum : Liquid
             {
                 public string ID;
-                public Action<LimbBehaviour> effect;
+                public Action<LimbBehaviour> _onEnterLimb;
+                public Action<BloodContainer> _onUpdate;
+                public Action<BloodContainer> _onEnterContainer;
+                public Action<BloodContainer> _onExitContainer;
 
                 public Serum(
                     string serumID,
                     UnityEngine.Color serumColor,
-                    Action<LimbBehaviour> effect
+                    Action<LimbBehaviour> onEnterLimb,
+                    Action<BloodContainer> onUpdate,
+                    Action<BloodContainer> OnEnterContainer,
+                    Action<BloodContainer> OnExitContainer
                 )
                 {
                     ID = serumID;
                     Color = serumColor;
-                    this.effect = effect;
+                    _onEnterLimb = onEnterLimb;
+                    _onUpdate = onUpdate;
+                    _onEnterContainer = OnEnterContainer;
+                    _onExitContainer = OnExitContainer;
                 }
 
                 public override void OnEnterLimb(LimbBehaviour limb)
                 {
-                    effect(limb);
+                    _onEnterLimb?.Invoke(limb);
+                }
+
+                public override void OnUpdate(BloodContainer container)
+                {
+                    _onUpdate?.Invoke(container);
                 }
 
                 public override void OnEnterContainer(BloodContainer container)
                 {
-                    //
+                    _onEnterContainer?.Invoke(container);
                 }
 
                 public override void OnExitContainer(BloodContainer container)
                 {
-                    //
+                    _onExitContainer?.Invoke(container);
                 }
             }
         }
