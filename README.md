@@ -38,7 +38,7 @@ namespace Mod
                 thumbnail: "test.png",
                 serumID: "TRUE KNOCKOUT SERUM",
                 serumColor: new Color(1f, 1f, 1f),
-                effect: knockout
+                onEnterLimb: knockout
             );
         }
     }
@@ -56,7 +56,10 @@ namespace Mod
 | `thumbnail`     | `string`         | Path to the syringe’s icon (e.g., `"Assets/Icons/mySyringe.png"`). |
 | `serumID`       | `string`         | Unique ID to identify the serum. |
 | `serumColor`    | `Color`          | Color of the serum inside the syringe. |
-| `effect` | `Action<LimbBehaviour>` | Function to run once when the syringe pierces a limb. |
+| `onEnterLimb` | `Action<LimbBehaviour>` |Called when this liquid enters a limb. Note that this may be called quite often for the same container as liquid quickly moves in and out of it. |
+| `onUpdate` | `Action<LimbBehaviour>` |Called every second by every container for every liquid it contains. |
+| `onEnterContainer` | `Action<LimbBehaviour>` |Called when this liquid enters a container. Limbs are also containers. Note that this may be called quite often for the same container as liquid quickly moves in and out of it. |
+| `onExitContainer` | `Action<LimbBehaviour>` |Called when this liquid exits a container. Note that this may be called quite often for the same container as liquid quickly moves in and out of it.|
 | `baseSyringe`   | `string` _(optional)_ | Name of a base syringe to inherit visuals/behavior from (defaults to `"Knockout Syringe"`). |
 | `category`      | `string` _(optional)_ | Category shown in the UI (defaults to `"Chemistry"`). |
 
