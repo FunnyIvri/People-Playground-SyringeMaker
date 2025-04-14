@@ -17,10 +17,6 @@ namespace SyringeMaker
         /// An action that is triggered immediately when the syringe pierces a limb.
         /// The action receives the affected <see cref="LimbBehaviour"/> as its parameter.
         /// </param>
-        /// <param name="constantEffect">
-        /// An action that is called continuously while the syringe remains in the limb.
-        /// The action receives the affected <see cref="LimbBehaviour"/> as its parameter.
-        /// </param>
         /// <param name="baseSyringe">The name of an existing syringe to use as a base template. Defaults to "Knockout Syringe".</param>
         /// <param name="category">The category this syringe appears under in the UI. Defaults to "Chemistry".</param>
         public Syringe(
@@ -29,13 +25,12 @@ namespace SyringeMaker
             string thumbnail,
             string serumID,
             UnityEngine.Color serumColor,
-            Action<LimbBehaviour> instantEffect,
-            Action<LimbBehaviour> constantEffect,
+            Action<LimbBehaviour> effect,
             string baseSyringe = "Knockout Syringe",
             string category = "Chemistry"
         )
         {
-            ModAPI.RegisterLiquid(serumID, new SyringeItem.Serum(serumID, serumColor, effects));
+            ModAPI.RegisterLiquid(serumID, new SyringeItem.Serum(serumID, serumColor, effect));
             ModAPI.Register(
                 new Modification()
                 {
@@ -64,22 +59,22 @@ namespace SyringeMaker
             public class Serum : Liquid
             {
                 public string ID;
-                public Action<LimbBehaviour> effects;
+                public Action<LimbBehaviour> effect;
 
                 public Serum(
                     string serumID,
                     UnityEngine.Color serumColor,
-                    Action<LimbBehaviour> effects
+                    Action<LimbBehaviour> effect
                 )
                 {
                     ID = serumID;
                     Color = serumColor;
-                    this.effects = effects;
+                    this.effect = effect;
                 }
 
                 public override void OnEnterLimb(LimbBehaviour limb)
                 {
-                    effects(limb);
+                    effect(limb);
                 }
 
                 public override void OnEnterContainer(BloodContainer container)
