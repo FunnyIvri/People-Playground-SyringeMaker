@@ -5,13 +5,32 @@ namespace SyringeMaker
 {
     public class Syringe
     {
+        /// <summary>
+        /// Registers a custom syringe with defined appearance and behavior.
+        /// </summary>
+        /// <param name="name">The display name of the syringe.</param>
+        /// <param name="description">A brief description of the syringe, shown in the UI.</param>
+        /// <param name="thumbnail">The file path for the syringe's thumbnail image.</param>
+        /// <param name="serumID">A unique string identifier for the serum.</param>
+        /// <param name="serumColor">The color used to represent the serum inside the syringe.</param>
+        /// <param name="instantEffect">
+        /// An action that is triggered immediately when the syringe pierces a limb.
+        /// The action receives the affected <see cref="LimbBehaviour"/> as its parameter.
+        /// </param>
+        /// <param name="constantEffect">
+        /// An action that is called continuously while the syringe remains in the limb.
+        /// The action receives the affected <see cref="LimbBehaviour"/> as its parameter.
+        /// </param>
+        /// <param name="baseSyringe">The name of an existing syringe to use as a base template. Defaults to "Knockout Syringe".</param>
+        /// <param name="category">The category this syringe appears under in the UI. Defaults to "Chemistry".</param>
         public Syringe(
             string name,
             string description,
             string thumbnail,
             string serumID,
             UnityEngine.Color serumColor,
-            Action<LimbBehaviour> effects,
+            Action<LimbBehaviour> instantEffect,
+            Action<LimbBehaviour> constantEffect,
             string baseSyringe = "Knockout Syringe",
             string category = "Chemistry"
         )
