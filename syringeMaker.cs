@@ -52,8 +52,8 @@ namespace SyringeMaker
                     serumColor,
                     onEnterLimb,
                     onUpdate,
-                    OnEnterContainer,
-                    OnExitContainer
+                    onEnterContainer,
+                    onExitContainer
                 )
             );
             ModAPI.Register(
